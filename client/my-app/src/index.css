@@ -1,0 +1,122 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    list-style: none;
+}
+
+
+
+.page {
+    display: flex;
+    background-color: rgb(27, 27, 27);
+    width: 100vw;
+    height: 100vh;
+    color: aliceblue;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    width: 10%;
+    border-radius: 18px;
+    border: 1px rgb(48, 48, 48) solid;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    flex: 1;
+}
+
+.window {
+    background-color: rgb(27, 27, 27);
+    flex: 1;
+    border-radius: 18px;
+    border: 1px rgb(48, 48, 48) solid;
+}
+
+.form-container {
+    height: 10%;
+    border: 1px rgb(48, 48, 48) solid;
+    border-radius: 18px;
+}
+
+.form {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+}
+
+.form__input {
+    display: flex;
+    height: 100%;
+    width: 90%;
+    background-color: rgb(48, 48, 48);
+    outline: none;
+    border: none;
+    color: aliceblue;
+    font-size: 2em;
+    padding: 1em;
+    border-bottom-left-radius: 18px;
+    border-top-left-radius: 18px;
+}
+
+
+.form__submit {
+    display: block;
+    min-height: 100%;
+    width: 10%;
+    font-size: 2em;
+    padding: 1em;
+    background-color: rgb(43, 43, 43);
+    cursor: pointer;
+    border: 1px rgb(48, 48, 48) solid;
+    border-bottom-right-radius: 18px;
+    border-top-right-radius: 18px;
+
+}
+
+.users {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
+
+}
+
+.users__item {
+    border-bottom: 1px rgb(48, 48, 48) solid;
+}
+
+.message {
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+    gap: 8px;
+}
+
+.message__item {
+    background-color: rgb(48, 48, 48);
+    max-width: fit-content;
+    padding: 8px;
+    border-radius: 8px;
+    position: relative;
+}
+
+.message__item:before {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: -2px;
+    width: 8px;
+    height: 8px;
+    background-color: rgb(48, 48, 48);
+    transform: rotate(45deg);
+}

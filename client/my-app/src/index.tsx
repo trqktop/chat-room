@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { Provider, useDispatch, useSelector } from "react-redux";
-import { store } from "./redux/store";
-import { AddMessage, userName } from "./redux/store";
+import { store } from "./store/store";
+import { AddMessage, userName } from "./store/store";
 import "./index.css";
 import nameGenerator from "./features/nameGenerator";
 const container = document.getElementById("root")!;

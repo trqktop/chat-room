@@ -1,61 +1,66 @@
 import { configureStore, ThunkAction, Action, createSlice } from '@reduxjs/toolkit';
 import { createMySocketMiddleware } from './createMySocketMiddleware';
 
-
 export interface Chat {
-  messages: any[],
+  messages: any[];
   events: {
-    isConnect: boolean
-  },
-  users: any[]
+    isConnect: boolean;
+  };
+  users: any[];
+  myName: any;
 }
 const initialState: Chat = {
   messages: [],
   events: {
-    isConnect: false
+    isConnect: false,
   },
-  users: []
+  users: [],
+  myName: null,
 };
 
 export const chatSlice = createSlice({
-  name: 'chat',
+  name: "chat",
   initialState,
   reducers: {
-    connect(state, action) {
-      return ({
+    userName(state, action) {
+      return {
+        ...state,
+        myName: action.payload,
+      };
+    },
+
+    activeUsers(state, action) {
+      return {
+        ...state,
+        users: action.payload,
+      };
+    },
+    updateMessages(state, action) {
+      return {
         ...state,
         messages: action.payload,
         events: {
-          isConnect: true
-        }
-      })
+          isConnect: true,
+        },
+      };
     },
-    disconnect(state, action) {
-    },
-    message(state, action) {
-  
-      return ({
+    AddMessage(state, action) {
+      return {
         ...state,
         messages: [...state.messages, action.payload],
-      })
-    }
+      };
+    },
   },
 });
 
-
-const chatReducer = chatSlice.reducer
-
-
-
-
-
-
+const chatReducer = chatSlice.reducer;
 
 //тут будут действия сокета
 // dispatch(action)
 //при вызове диспатча сначала работаем с сокетом. потом с диспатчем
 
-export const { connect, disconnect, message } = chatSlice.actions;
+export const { AddMessage, updateMessages, userName } = chatSlice.actions;
+
 
 
 export const store = configureStore({

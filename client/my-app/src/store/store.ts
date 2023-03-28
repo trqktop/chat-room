@@ -1,6 +1,5 @@
 import { configureStore, ThunkAction, Action, createSlice } from '@reduxjs/toolkit';
-
-import { soketMideware } from './socketMiddleware';
+import { createMySocketMiddleware } from './createMySocketMiddleware';
 
 
 export interface Chat {
@@ -63,7 +62,10 @@ export const store = configureStore({
   reducer: {
     chat: chatReducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(soketMideware),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(
+      createMySocketMiddleware()
+    ),
 });
 
 

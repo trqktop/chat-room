@@ -1,14 +1,24 @@
-import { configureStore, ThunkAction, Action, createSlice } from '@reduxjs/toolkit';
-import { createMySocketMiddleware } from './createMySocketMiddleware';
-
+import {
+  configureStore,
+  createSlice,
+  ThunkAction,
+  Action,
+} from "@reduxjs/toolkit";
+import { createMySocketMiddleware } from "./createMySocketMiddleware";
+type Message = {
+  user: string | null;
+  message: string;
+  file: string | null;
+};
 export interface Chat {
-  messages: any[];
+  messages: Awaited<Promise<Array<Message>>>;
   events: {
     isConnect: boolean;
   };
-  users: any[];
-  myName: any;
+  users: Awaited<Promise<Array<string>>>;
+  myName: string | null;
 }
+
 const initialState: Chat = {
   messages: [],
   events: {
@@ -28,7 +38,6 @@ export const chatSlice = createSlice({
         myName: action.payload,
       };
     },
-
     activeUsers(state, action) {
       return {
         ...state,
@@ -45,32 +54,37 @@ export const chatSlice = createSlice({
       };
     },
     AddMessage(state, action) {
+      const { inputValue, url }: any = { ...action.payload };
       return {
         ...state,
-        messages: [...state.messages, action.payload],
+        messages: [
+          ...state.messages,
+          {
+            user: state.myName,
+            message: inputValue,
+            file: url ?? null,
+          },
+        ],
       };
     },
   },
 });
 
 const chatReducer = chatSlice.reducer;
-
-//тут будут действия сокета
-// dispatch(action)
-//при вызове диспатча сначала работаем с сокетом. потом с диспатчем
-
 export const { AddMessage, updateMessages, userName } = chatSlice.actions;
-
-
-
 export const store = configureStore({
   reducer: {
     chat: chatReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(
-      createMySocketMiddleware()
-    ),
+    getDefaultMiddleware().concat(createMySocketMiddleware()),
 });
 
-
+export type AppDispatch = typeof store.dispatch;
+export type RootState = ReturnType<typeof store.getState>;
+export type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  RootState,
+  unknown,
+  Action<string>
+>;

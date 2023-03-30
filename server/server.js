@@ -1,65 +1,59 @@
-const express = require("express");
-const app = express();
-const http = require("http", {
-    cors: {
-        origin: "*",
-        methods: ["GET", "POST"],
-    },
-});
-const server = http.createServer(app);
+const PORT = 8888;
+const http = require("http");
+const server = http.createServer();
 const {
     Server
 } = require("socket.io");
 
-const io = new Server(server);
-const count = io.engine.clientsCount;
-const chat = {
-    messages: [],
-    users: [],
-};
+const io = new Server(server, {
+    maxHttpBufferSize: 1e9,
+    httpCompression: true,
+    cors: {
+        origin: "*",
+        credentials: true,
+        optionSuccessStatus: 200,
+        methods: ["GET", "POST"],
+    },
+});
 
-
+let users = [];
+let messages = [];
 
 io.on("connection", (socket) => {
-    socket.emit("chat/updateMessages", chat.messages);
-    socket.on("chat/AddMessage", (value, userName) => {
-        chat.messages.push({
-            user: userName,
-            text: value
+    socket.on("JOIN_CHAT", (user) => {
+        users.push({
+            name: user.name,
+            id: socket.id,
         });
-        io.emit("chat/updateMessages", chat.messages);
+        const userNames = users.map((user) => user.name);
+
+        io.emit("GET_USERS", userNames);
+        io.emit("REQUEST_MESSAGES", messages);
     });
 
-    socket.on("chat/userName", (name) => {
-        console.log(chat.users);
-        chat.users.push({
-            id: socket.id,
-            name: name,
+    socket.on("SEND_MESSAGE", (data) => {
+        messages.push({
+            user: data.userName,
+            message: data.message,
+            file: data.file,
         });
-        io.emit(
-            "chat/activeUsers",
-            chat.users.map((item) => item.name)
-        );
+        io.emit("GET_MESSAGES", messages);
+    });
+
+    socket.on("REQUEST_MESSAGES", () => {
+        io.emit("GET_MESSAGES", messages);
     });
 
     socket.on("disconnect", () => {
-        console.log("user disconnected", socket.id);
-        chat.users = [
-            ...chat.users.filter((user) => {
-                return user.id !== socket.id;
-            }),
-        ];
+        users = [...users.filter((user) => user.id !== socket.id)];
+
         io.emit(
-            "chat/activeUsers",
-            chat.users.map((item) => item.name)
+            "GET_USERS",
+            users.map((item) => item.name)
         );
     });
 });
 
-
-server.listen(8888, (err) => {
-    if (err) {
-        throw Error(err);
-    }
-    console.log("listening on *:8888");
+server.listen(PORT, () => {
+    console.log(`Start server on port ${PORT}`);
 });

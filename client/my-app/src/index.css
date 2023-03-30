@@ -65,30 +65,33 @@ li {
 
 .form-container {
     position: sticky;
-    bottom: 8px;
+    background-color: rgb(27, 27, 27);
+    border-radius: 18px;
+    bottom: 0;
 }
 
 .form {
     display: flex;
     width: 100%;
+    height: 100%;
     justify-content: center;
     border-radius: 18px;
     border: 1px rgb(48, 48, 48) solid;
-
+    padding: 1em;
 }
 
 .form__input {
     display: flex;
     min-height: 100%;
-    width: 90%;
+    width: 75%;
     background-color: rgb(48, 48, 48);
     outline: none;
     border: none;
     color: aliceblue;
     font-size: 2em;
     padding: 1em;
-    border-bottom-left-radius: 18px;
-    border-top-left-radius: 18px;
+
+    border-radius: 18px;
 }
 
 
@@ -118,6 +121,9 @@ li {
     position: relative;
     display: flex;
     min-height: 100%;
+    border-bottom-left-radius: 18px;
+    border-top-left-radius: 18px;
+    margin-left: 1em;
 }
 
 input[type="file"] {

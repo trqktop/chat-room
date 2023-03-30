@@ -108,6 +108,7 @@ const Form = () => {
           value={inputValue}
           className="form__input"
           onChange={inputChangeValue}
+          placeholder='Message'
         ></input>
         <label className="form__input-file-label">
           <input name="file" type="file" onChange={handleFilePick} />

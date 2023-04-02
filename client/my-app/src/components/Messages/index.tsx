@@ -1,15 +1,23 @@
 import { RootState } from "../../redux/store";
 import { useSelector } from "react-redux";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Message from "./Message";
+import localforage from 'localforage'
 import "./Messages.css";
 const Messages = () => {
-  const messages = useSelector((state: RootState) => state.chat.messages);
+  const update = useSelector((state: RootState) => state.chat.update);
   const myName = useSelector((state: RootState) => state.chat.myName);
+  const [messages, setMessages]: any = useState([])
   const lastMessageRef: React.RefObject<HTMLLIElement> = React.useRef(null);
   useEffect(() => {
     lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  useEffect(() => {
+    localforage.getItem('messages').then((messages): any => {
+      setMessages(messages)
+    })
+  }, [update])
 
   return (
     <ul className="message">

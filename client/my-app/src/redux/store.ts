@@ -5,6 +5,7 @@ import {
   Action,
 } from "@reduxjs/toolkit";
 import { createMySocketMiddleware } from "./createMySocketMiddleware";
+import localforage from "localforage";
 export type TMessage = {
   user: string | null;
   message: string;
@@ -15,6 +16,7 @@ export type TMessage = {
 };
 export interface Chat {
   messages: Awaited<Promise<Array<TMessage>>>;
+  update: boolean,
   events: {
     isConnect: boolean;
   };
@@ -23,6 +25,7 @@ export interface Chat {
 }
 
 const initialState: Chat = {
+  update: false,
   messages: [],
   events: {
     isConnect: false,
@@ -50,17 +53,28 @@ export const chatSlice = createSlice({
     updateMessages(state, action) {
       return {
         ...state,
-        messages: action.payload,
-      };
+        update: !state.update
+      }
+      // return {
+      //   ...state,
+      //   messages: action.payload,
+      // };
     },
     getMessage(state, action) {
       return {
         ...state,
-        messages: [...state.messages, action.payload],
-      };
+        update: !state.update
+      }
+      // return {
+      //   ...state,
+      //   messages: [...state.messages, action.payload],
+      // };
     },
     sendMessage(state, action): any {
-      return state;
+      // return {
+      //   ...state,
+      //   update: !state.update
+      // }
       // const { inputValue, fileData }: any = { ...action.payload };
       // return {
       //   ...state,

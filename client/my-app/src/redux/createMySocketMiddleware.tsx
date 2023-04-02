@@ -18,7 +18,6 @@ export const createMySocketMiddleware = (): Middleware => {
         });
       });
     });
-
     // {
     //   reducerAction: "chat/getMessage",
     //     socketAction: "GET_MESSAGES",
@@ -35,6 +34,8 @@ export const createMySocketMiddleware = (): Middleware => {
     //   //   payload: messages,
     //   // });
     // });
+
+
 
     localforage.getItem('messages').then((messages) => {
       if (messages) {
@@ -56,7 +57,6 @@ export const createMySocketMiddleware = (): Middleware => {
     }).catch((err) => {
       console.log(err);
     });
-
     socket.on("connect_error", (err) => {
       console.log(err);
     });
@@ -78,7 +78,6 @@ export const createMySocketMiddleware = (): Middleware => {
           })
         }
       }
-      console.log(action)
       next(action);
     };
   };

@@ -4,7 +4,7 @@ const server = http.createServer();
 const { Server } = require("socket.io");
 
 const io = new Server(server, {
-  maxHttpBufferSize: 1e9,
+  maxHttpBufferSize: 1e8,
   httpCompression: true,
   cors: {
     origin: "*",
@@ -13,6 +13,8 @@ const io = new Server(server, {
     methods: ["GET", "POST"],
   },
 });
+
+
 
 let users = [];
 let messages = [];
@@ -25,7 +27,6 @@ io.on("connection", (socket) => {
     });
     const userNames = users.map((user) => user.name);
     io.emit("GET_USERS", userNames);
-    console.log(messages)
     io.emit("REQUEST_MESSAGES", messages);
   });
 

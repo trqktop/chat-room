@@ -32,3 +32,10 @@
     flex: 1;
     padding: 8px; */
 }
+
+
+@media screen and (max-width: 900px) {
+    .header {
+        display: none;
+    }
+}

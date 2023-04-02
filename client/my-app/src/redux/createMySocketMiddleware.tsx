@@ -35,8 +35,6 @@ export const createMySocketMiddleware = (): Middleware => {
     //   // });
     // });
 
-
-
     localforage.getItem('messages').then((messages) => {
       if (messages) {
         dispatch({

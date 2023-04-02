@@ -1,0 +1,11 @@
+.users {
+    display: flex;
+    flex-direction: column;
+    gap: .5em;
+    padding: 8px;
+    font-size: 1.3em;
+}
+
+.users__item {
+    border-bottom: 1px rgb(48, 48, 48) solid;
+}

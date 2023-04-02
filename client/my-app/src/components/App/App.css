@@ -1,0 +1,30 @@
+.page {
+    display: flex;
+    max-width: 100vw;
+    min-height: 100vh;
+    color: aliceblue;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    max-width: 10%;
+    min-width: 150px;
+    border-radius: 18px;
+    border: 1px rgb(48, 48, 48) solid;
+    position: sticky;
+    top: 0;
+    max-height: 100vh;
+    padding: 8px;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    max-width: 90%;
+    overflow-x: hidden;
+    flex: 1;
+    padding: 8px;
+}

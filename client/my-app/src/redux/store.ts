@@ -5,13 +5,16 @@ import {
   Action,
 } from "@reduxjs/toolkit";
 import { createMySocketMiddleware } from "./createMySocketMiddleware";
-type Message = {
+export type TMessage = {
   user: string | null;
   message: string;
-  file: string | null;
+  file: {
+    type: string;
+    src: string;
+  };
 };
 export interface Chat {
-  messages: Awaited<Promise<Array<Message>>>;
+  messages: Awaited<Promise<Array<TMessage>>>;
   events: {
     isConnect: boolean;
   };
@@ -32,13 +35,13 @@ export const chatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
-    userName(state, action) {
+    sendName(state, action) {
       return {
         ...state,
         myName: action.payload,
       };
     },
-    activeUsers(state, action) {
+    getUsers(state, action) {
       return {
         ...state,
         users: action.payload,
@@ -48,30 +51,34 @@ export const chatSlice = createSlice({
       return {
         ...state,
         messages: action.payload,
-        events: {
-          isConnect: true,
-        },
       };
     },
-    AddMessage(state, action) {
-      const { inputValue, url }: any = { ...action.payload };
+    getMessage(state, action) {
       return {
         ...state,
-        messages: [
-          ...state.messages,
-          {
-            user: state.myName,
-            message: inputValue,
-            file: url ?? null,
-          },
-        ],
+        messages: [...state.messages, action.payload],
       };
+    },
+    sendMessage(state, action): any {
+      return state;
+      // const { inputValue, fileData }: any = { ...action.payload };
+      // return {
+      //   ...state,
+      //   messages: [
+      //     ...state.messages,
+      //     {
+      //       user: state.myName,
+      //       message: inputValue,
+      //       file: fileData,
+      //     },
+      //   ],
+      // };
     },
   },
 });
 
 const chatReducer = chatSlice.reducer;
-export const { AddMessage, updateMessages, userName } = chatSlice.actions;
+export const { sendMessage, updateMessages, sendName } = chatSlice.actions;
 export const store = configureStore({
   reducer: {
     chat: chatReducer,

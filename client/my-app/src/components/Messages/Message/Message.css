@@ -1,54 +1,53 @@
 .message__item {
     background-color: rgb(48, 48, 48);
-    display: flex;
-    max-width: 100%;
-    padding: 8px;
+    padding: .5em 1em;
+    font-size: 16px;
     border-radius: 8px;
-    position: relative;
     display: flex;
     flex-direction: column;
+    width: fit-content;
+    max-width: 80%;
     align-self: flex-end;
-}
-
-.message__item>span {
-    display: inline-block;
+    /* display: flex;
     max-width: 100%;
-    word-wrap: break-word;
-}
-
-.message__image {
-    max-width: 20vw;
-}
-
-.message__item:before {
-    content: '';
-    position: absolute;
-    bottom: 4px;
-    right: -2px;
-    width: 8px;
-    height: 8px;
-    background-color: rgb(48, 48, 48);
-    transform: rotate(45deg);
+    padding: 8px;
+    position: relative;
+    align-self: flex-end; */
 }
 
 .message__item_get {
     align-self: flex-start;
 }
 
-.message__item_get:before {
+/* .message__item>span {
+    display: inline-block;
+    max-width: 100%;
+    word-wrap: break-word;
+}
+ */
+
+/* 
+.message__image {
+    max-width: 20vw;
+}
+
+
+
+*/
+
+.message__username {
+    font-size: 14px;
+    color: rgb(165, 165, 165);
+}
+
+/* .message__item_get:before {
     content: '';
     bottom: 4px;
     left: -2px;
     width: 8px;
     height: 8px;
     transform: rotate(45deg);
-}
-
-
-.message__username {
-    color: rgb(165, 165, 165);
-    font-size: .5em;
-}
+} */
 
 
 audio,

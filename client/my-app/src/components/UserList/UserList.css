@@ -1,11 +1,11 @@
 .users {
-    display: flex;
-    flex-direction: column;
-    gap: .5em;
-    padding: 8px;
-    font-size: 1.3em;
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  white-space: wrap;
 }
 
 .users__item {
-    border-bottom: 1px rgb(48, 48, 48) solid;
+  border-bottom: 1px rgb(48, 48, 48) solid;
+  padding: 8px;
 }

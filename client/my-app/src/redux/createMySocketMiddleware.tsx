@@ -4,7 +4,7 @@ import { getActions } from "./actions";
 
 export const createMySocketMiddleware = (): Middleware => {
   return ({ getState, dispatch }) => {
-    const url = "http://192.168.2.225:8888";
+    const url = "http://localhost:8888";
     //  "proxy": "http://192.168.2.225:8888" my
     //  "proxy": "http://192.168.2.159:8000"
     let socket = io(url);

@@ -7,24 +7,28 @@
 }
 
 .header {
-    display: flex;
+    display: inline-block;
+    height: 100vh;
+    border: 1px rgb(48, 48, 48) solid;
+    position: sticky;
+    padding: 8px;
+    top: 0;
+    /* display: flex;
     flex-direction: column;
     justify-content: space-between;
     max-width: 10%;
     min-width: 150px;
-    border-radius: 18px;
-    border: 1px rgb(48, 48, 48) solid;
-    position: sticky;
-    top: 0;
     max-height: 100vh;
-    padding: 8px;
+ */
 }
 
 .content {
+    flex: 1;
     display: flex;
     flex-direction: column;
+    /*
     max-width: 90%;
     overflow-x: hidden;
     flex: 1;
-    padding: 8px;
+    padding: 8px; */
 }

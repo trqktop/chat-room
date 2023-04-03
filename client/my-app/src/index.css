@@ -2,6 +2,11 @@ html {
   max-width: 100vw;
 }
 
+:root {
+  --main-bg: rgb(27, 27, 27);
+  --second-bg: rgb(165, 165, 165);
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -9,8 +14,10 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: rgb(27, 27, 27);
+  background-color: var(--main-bg);
 }
+
+
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
@@ -30,13 +37,13 @@ li {
 
 
 ::-webkit-scrollbar {
-  background-color: rgb(48, 48, 48);
+  background-color: var(--main-bg);
   width: 5px;
   border-radius: 8px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgb(165, 165, 165);
+  background-color: var(--second-bg);
   width: 5px;
   border-radius: 8px;
 }

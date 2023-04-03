@@ -24,7 +24,6 @@ const emoji = [
 
 const getRandomEmoji = () => {
   const randomIndex = Math.floor(Math.floor(Math.random() * (emoji.length)))
-  console.log(randomIndex, emoji[randomIndex])
   return emoji[randomIndex]
 }
 

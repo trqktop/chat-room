@@ -7,11 +7,11 @@ function getActions() {
     // {
     //   reducerAction: "chat/updateMessages",
     //   socketAction: "REQUEST_MESSAGES",
+    // // },
+    // {
+    //   reducerAction: "chat/getMessage",
+    //   socketAction: "GET_MESSAGES",
     // },
-    {
-      reducerAction: "chat/getMessage",
-      socketAction: "GET_MESSAGES",
-    },
     // {
     //   reducerAction: "chat/sendMessage",
     //   socketAction: "GET_MESSAGES",

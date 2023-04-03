@@ -1,0 +1,12 @@
+.thread {
+  border: 1px red solid;
+}
+
+.thread__messages {
+  display: flex;
+  flex-direction: column;
+}
+
+.thread__message {
+  opacity: .3;
+}

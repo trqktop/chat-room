@@ -9,6 +9,7 @@ import localforage from "localforage";
 export type TMessage = {
   user: string | null;
   message: string;
+  id: string;
   file: {
     type: string;
     src: string;
@@ -16,12 +17,13 @@ export type TMessage = {
 };
 export interface Chat {
   messages: Awaited<Promise<Array<TMessage>>>;
-  update: boolean,
+  update: boolean;
   events: {
     isConnect: boolean;
   };
   users: Awaited<Promise<Array<string>>>;
   myName: string | null;
+  thread: any;
 }
 
 const initialState: Chat = {
@@ -30,6 +32,7 @@ const initialState: Chat = {
   events: {
     isConnect: false,
   },
+  thread: [],
   users: [],
   myName: null,
 };
@@ -53,18 +56,39 @@ export const chatSlice = createSlice({
     updateMessages(state, action) {
       return {
         ...state,
-        update: !state.update
-      }
-      // return {
-      //   ...state,
-      //   messages: action.payload,
-      // };
+        messages: action.payload,
+      };
     },
     getMessage(state, action) {
       return {
         ...state,
-        update: !state.update
-      }
+        messages: [...state.messages, action.payload],
+      };
+    },
+    getTread(state, action) {
+      const newMessages = [...state.messages];
+      const index = newMessages.findIndex((message) => {
+        return message.id === action.payload.id;
+      });
+      newMessages[index] = action.payload;
+      return { ...state, messages: newMessages };
+    },
+
+
+    sendThread(state, action) {
+    // const newMessages = [...state.messages];
+    //   const index = newMessages.findIndex((message) => {
+    //     return message.id === action.payload.id;
+    //   });
+    //   newMessages[index] = action.payload;
+    //   return { ...state, messages: newMessages };
+
+
+
+      // return {
+      //   ...state,
+      //   thread: action.payload,
+      // };
       // return {
       //   ...state,
       //   messages: [...state.messages, action.payload],
@@ -92,7 +116,8 @@ export const chatSlice = createSlice({
 });
 
 const chatReducer = chatSlice.reducer;
-export const { sendMessage, updateMessages, sendName } = chatSlice.actions;
+export const { sendMessage, updateMessages, sendName, sendThread } =
+  chatSlice.actions;
 export const store = configureStore({
   reducer: {
     chat: chatReducer,

@@ -2,6 +2,7 @@ import { Middleware } from "@reduxjs/toolkit";
 import { io } from "socket.io-client";
 import { getActions } from "./actions";
 import localforage from "localforage";
+import { sendMessage } from "./store";
 
 export const createMySocketMiddleware = (): Middleware => {
   return ({ getState, dispatch }) => {
@@ -18,62 +19,97 @@ export const createMySocketMiddleware = (): Middleware => {
         });
       });
     });
-    // {
-    //   reducerAction: "chat/getMessage",
-    //     socketAction: "GET_MESSAGES",
-    // },
-    // socket.on("GET_MESSAGES", (message) => {
-    //   console.log(message)
-    //   // localforage.getItem('messages').then((oldMessages: any) => {
-    //   //   console.log(oldMessages)
-    //   //   const newMessages = [...oldMessages, message]
-    //   //   localforage.setItem('messages', newMessages)
-    //   // })
-    //   // dispatch({
-    //   //   type: "chat/getMessage",
-    //   //   payload: messages,
-    //   // });
-    // });
-
-    localforage.getItem('messages').then((messages) => {
-      if (messages) {
-        dispatch({
-          type: "chat/updateMessages",
-          payload: messages,
-        });
+    socket.on("GET_MESSAGES", (messageFromServer) => {
+      const { user, message, thread, id, file } = messageFromServer
+      const messageWithoutFile = { user, message, thread, id }
+      if (file) {
+        const fileData = {
+          file,
+          id
+        }
+        localforage.getItem("files").then((files: any) => {
+          const newFiles = [...files, fileData]
+          localforage
+            .setItem("files", newFiles, () => {
+              dispatch({
+                type: "chat/getMessage",
+                payload: messageWithoutFile,
+              });
+            })
+        })
       }
       else {
-        socket.on('REQUEST_MESSAGES', (messages) => {
-          localforage.setItem('messages', messages).then(messages => {
-            // dispatch({
-            //   type: "chat/updateMessages",
-            //   payload: messages,
-            // });
-          }).catch((err) => console.log(err));
+        dispatch({
+          type: "chat/getMessage",
+          payload: messageFromServer,
         });
       }
-    }).catch((err) => {
-      console.log(err);
     });
-    socket.on("connect_error", (err) => {
-      console.log(err);
+
+
+
+    socket.on("GET_THREAD", (message) => {
+      dispatch({
+        type: "chat/getTread",
+        payload: message,
+      });
     });
+    socket.on("REQUEST_MESSAGES", (messages) => {
+      const files = messages
+        .filter((item: any) => item.file)
+        .map(({ file, id }: any) => {
+          return { file, id };
+        });
+      localforage.setItem("files", files, () => {
+        const clearMessages = messages.map(
+          ({ user, message, thread, id }: any) => {
+            return {
+              user,
+              message,
+              thread,
+              id,
+            };
+          }
+        );
+        localforage.setItem("files", files, () => {
+          dispatch({
+            type: "chat/updateMessages",
+            payload: clearMessages,
+          })
+        })
+      })
+    });
+
     return (next) => (action) => {
       if (action.type) {
         if (action.type === "chat/sendName") {
           socket.emit("JOIN_CHAT", { name: action.payload });
         }
         if (action.type === "chat/sendMessage") {
-          localforage.getItem('messages').then((oldMessages: any) => {
-            const message = {
-              message: action.payload.inputValue,
-              user: getState().chat.myName,
-              file: action.payload.fileData ?? null,
+          const message = {
+            message: action.payload.inputValue,
+            user: getState().chat.myName,
+            file: action.payload.fileData ?? null,
+            id: action.payload.id ?? null,
+            thread: action.payload.thread ?? null,
+          };
+          socket.emit("SEND_MESSAGE", message).on("GET_MESSAGES", (message) => {
+            const file = message.file
+            if (file) {
+              const { file, id } = message
+              localforage
+                .getItem("files")
+                .then((files: any) => {
+                  const newFiles = [...files,
+                  { file, id }]
+                  localforage
+                    .setItem("files", newFiles)
+                })
             }
-            const newMessages = [...oldMessages, message]
-            localforage.setItem('messages', newMessages)
-            socket.emit("SEND_MESSAGE", message);
           })
+        }
+        if (action.type === "chat/sendThread") {
+          socket.emit("SEND_THREAD", action.payload);
         }
       }
       next(action);

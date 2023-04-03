@@ -4,7 +4,7 @@ const server = http.createServer();
 const { Server } = require("socket.io");
 
 const io = new Server(server, {
-  maxHttpBufferSize: 1e8,
+  maxHttpBufferSize: 1e9,
   httpCompression: true,
   cors: {
     origin: "*",
@@ -14,11 +14,9 @@ const io = new Server(server, {
   },
 });
 
-
-
 let users = [];
 let messages = [];
-
+let messageIdCounter = 0;
 io.on("connection", (socket) => {
   socket.on("JOIN_CHAT", (user) => {
     users.push({
@@ -31,12 +29,25 @@ io.on("connection", (socket) => {
   });
 
   socket.on("SEND_MESSAGE", (data) => {
-    messages.push({
+    messageIdCounter++;
+    const message = {
       user: data.user,
       message: data.message,
       file: data.file,
+      thread: data.thread,
+      id: messageIdCounter + socket.id,
+    };
+
+    messages.push(message);
+    io.emit("GET_MESSAGES", message);
+  });
+
+  socket.on("SEND_THREAD", (clientMessage) => {
+    const index = messages.findIndex((message) => {
+      return message.id == clientMessage.id;
     });
-    io.emit("GET_MESSAGES", data);
+    messages[index] = clientMessage;
+    io.emit("GET_THREAD", clientMessage);
   });
 
   socket.on("REQUEST_MESSAGES", () => {

@@ -4,17 +4,23 @@ import React, { useEffect, useState } from "react";
 import Message from "./Message";
 import localforage from "localforage";
 import "./Messages.css";
+import { TMessage } from "../../redux/store";
 
-const Messages = () => {
-  const messages = useSelector((state: RootState) => state.chat.messages);
-  const myName = useSelector((state: RootState) => state.chat.myName);
-  const lastMessageRef: React.RefObject<HTMLLIElement> = React.useRef(null);
-  const [messagesWithFiles, setMessagesWithFiles]: any = useState(null);
-  useEffect(() => {
-    localforage.getItem("files").then((dbFiles: any) => {
+type TFile = {
+  file: {
+    file: string;
+    type: string;
+  };
+  id: string;
+};
+
+async function mergeMessagesWithIDB(messages: any) {
+  const result = localforage
+    .getItem("files")
+    .then((dbFiles: any) => {
       if (dbFiles.length > -1) {
-        const localState = messages.map((message: any) => {
-          const index = dbFiles.findIndex((file: any) => {
+        const resultMessages = messages.map((message: TMessage) => {
+          const index = dbFiles.findIndex((file: TFile) => {
             return message.id === file.id;
           });
           if (index > -1) {
@@ -22,11 +28,28 @@ const Messages = () => {
           }
           return message;
         });
-        return localState
+        return resultMessages;
       }
-    }).then(localState => {
-      setMessagesWithFiles(localState);
     })
+    .then((localState) => {
+      return localState;
+    });
+  return await result;
+}
+
+const Messages = () => {
+  const messages = useSelector((state: RootState) => state.chat.messages);
+  const myName = useSelector((state: RootState) => state.chat.myName);
+  const lastMessageRef: React.RefObject<HTMLLIElement> = React.useRef(null);
+  const [messagesWithFiles, setMessagesWithFiles]: Awaited<Promise<any>> =
+    useState(null);
+  useEffect(() => {
+    if (messages.length) {
+      const getMessages = mergeMessagesWithIDB(messages);
+      getMessages.then((mergedMessages) => {
+        setMessagesWithFiles(mergedMessages);
+      });
+    }
   }, [messages]);
 
   useEffect(() => {
@@ -35,7 +58,7 @@ const Messages = () => {
 
   return (
     <ul className="message">
-      {messagesWithFiles?.map((data: any, index: number) => {// ??
+      {messagesWithFiles?.map((data: any, index: number) => {
         const { user }: any = { ...data };
         const classes =
           myName === user ? "message__item" : "message__item message__item_get";
@@ -46,6 +69,6 @@ const Messages = () => {
         );
       })}
     </ul>
-  )
-}
+  );
+};
 export default Messages;

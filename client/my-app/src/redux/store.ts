@@ -5,7 +5,7 @@ import {
   Action,
 } from "@reduxjs/toolkit";
 import { createMySocketMiddleware } from "./createMySocketMiddleware";
-import localforage from "localforage";
+import { createPeerMiddleware } from "./createPeerMiddleware";
 export type TMessage = {
   user: string | null;
   message: string;
@@ -24,17 +24,23 @@ export interface Chat {
   users: Awaited<Promise<Array<string>>>;
   myName: string | null;
   thread: any;
+  reply: null | TMessage;
+  conn: any
+  peerId: null | string;
 }
 
 const initialState: Chat = {
   update: false,
   messages: [],
+  reply: null,
   events: {
     isConnect: false,
   },
   thread: [],
   users: [],
   myName: null,
+  peerId: null,
+  conn: null
 };
 
 export const chatSlice = createSlice({
@@ -65,65 +71,44 @@ export const chatSlice = createSlice({
         messages: [...state.messages, action.payload],
       };
     },
-    getTread(state, action) {
-      const newMessages = [...state.messages];
-      const index = newMessages.findIndex((message) => {
-        return message.id === action.payload.id;
-      });
-      newMessages[index] = action.payload;
-      return { ...state, messages: newMessages };
+    sendMessage(state, action): any { },
+    replyMessage(state, action) {
+      state.reply = action.payload;
     },
-
-
-    sendThread(state, action) {
-    // const newMessages = [...state.messages];
-    //   const index = newMessages.findIndex((message) => {
-    //     return message.id === action.payload.id;
-    //   });
-    //   newMessages[index] = action.payload;
-    //   return { ...state, messages: newMessages };
-
-
-
-      // return {
-      //   ...state,
-      //   thread: action.payload,
-      // };
-      // return {
-      //   ...state,
-      //   messages: [...state.messages, action.payload],
-      // };
+    savePeerId(state, action) {
+      state.peerId = action.payload;
     },
-    sendMessage(state, action): any {
-      // return {
-      //   ...state,
-      //   update: !state.update
-      // }
-      // const { inputValue, fileData }: any = { ...action.payload };
-      // return {
-      //   ...state,
-      //   messages: [
-      //     ...state.messages,
-      //     {
-      //       user: state.myName,
-      //       message: inputValue,
-      //       file: fileData,
-      //     },
-      //   ],
-      // };
-    },
+    setConPeer(state, action) {
+      state.conn = action.payload
+    }
   },
 });
 
+
 const chatReducer = chatSlice.reducer;
-export const { sendMessage, updateMessages, sendName, sendThread } =
-  chatSlice.actions;
+
+
+
+
+
+
+export const {
+  sendMessage,
+  updateMessages,
+  sendName,
+  replyMessage,
+  savePeerId,
+  setConPeer
+} = chatSlice.actions;
+
+
 export const store = configureStore({
   reducer: {
     chat: chatReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(createMySocketMiddleware()),
+    // getDefaultMiddleware().concat(createMySocketMiddleware()),
+    getDefaultMiddleware().concat(createPeerMiddleware()),
 });
 
 export type AppDispatch = typeof store.dispatch;

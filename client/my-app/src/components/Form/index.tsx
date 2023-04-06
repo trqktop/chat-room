@@ -1,15 +1,16 @@
-import { sendMessage } from "../../redux/store";
-import { useDispatch } from "react-redux";
+import { sendMessage, replyMessage, RootState } from "../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { sendName } from "../../redux/store";
 import nameGenerator from "../../features/nameGenerator";
-
+import ReplyPanel from "../ReplyPanel";
 import toBase64 from "../../features/toBase64";
 import "./Form.css";
 
 const Form = () => {
   const [inputValue, setValue] = useState("");
   const [filePath, setFilePath] = useState(null);
+  const reply = useSelector((state: RootState) => state.chat.reply);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -17,14 +18,17 @@ const Form = () => {
     dispatch(sendName(randomName));
   }, []);
 
-  const sendMessageWithFiles = (fileInput: any, setFilePath: any) => {
+  const sendMessageWithFiles = (
+    fileInput: any,
+    setFilePath: React.SetStateAction<any>
+  ) => {
     const file = fileInput.files[0];
     toBase64(file).then((url) => {
       const fileData = {
         src: url,
         type: file.type,
       };
-      dispatch(sendMessage({ inputValue, fileData }));
+      dispatch(sendMessage({ inputValue, fileData, reply }));
     });
     setFilePath(null);
   };
@@ -44,6 +48,7 @@ const Form = () => {
       sendMessageWithFiles(fileInput, setFilePath);
     }
     setValue("");
+    dispatch(replyMessage(null));
     fileInput.value = "";
   };
 
@@ -54,6 +59,7 @@ const Form = () => {
 
   return (
     <section className="form-container">
+      <ReplyPanel />
       <form className="form" onSubmit={handleSubmit}>
         <input
           type="text"

@@ -5,7 +5,7 @@ import {
   Action,
 } from "@reduxjs/toolkit";
 import { createMySocketMiddleware } from "./createMySocketMiddleware";
-import { createPeerMiddleware } from "./createPeerMiddleware";
+
 export type TMessage = {
   user: string | null;
   message: string;
@@ -107,8 +107,7 @@ export const store = configureStore({
     chat: chatReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    // getDefaultMiddleware().concat(createMySocketMiddleware()),
-    getDefaultMiddleware().concat(createPeerMiddleware()),
+  getDefaultMiddleware().concat(createMySocketMiddleware()),
 });
 
 export type AppDispatch = typeof store.dispatch;

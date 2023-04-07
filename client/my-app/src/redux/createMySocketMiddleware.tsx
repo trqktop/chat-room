@@ -24,7 +24,7 @@ export type TMessageWithoutFiles = {
 
 export const createMySocketMiddleware = (): Middleware => {
   return ({ getState, dispatch }) => {
-    const url = "http://192.168.2.225:8888";
+    const url = "http://localhost:8888";
 
     let socket = io(url);
     const { actions } = getActions();

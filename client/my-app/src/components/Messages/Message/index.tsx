@@ -9,14 +9,15 @@ const Message = ({ data }: any) => {
 
   const renderFile = file
     ? getTypeFile(type, src, {
-        width: window.innerWidth / 4,
-        height: window.innerHeight / 3,
-      })
+      width: window.innerWidth / 4,
+      height: window.innerHeight / 3,
+    })
     : null;
+
+
 
   return (
     <>
-      {/* {modalIsOpened ? <MessageModal /> : null}  */}
       <div className="message__item-container" id={id}>
         <ReplyMessageBlock reply={reply} />
         <span className="message__username">{user}</span>
@@ -28,15 +29,5 @@ const Message = ({ data }: any) => {
   );
 };
 
-// const MessageModal = () => {
-//   return (
-//     <div className="message__modal">
-//       <ul>
-//         <li>ответить</li>
-//         <li>переслать</li>
-//       </ul>
-//     </div>
-//   );
-// };
 
 export default Message;

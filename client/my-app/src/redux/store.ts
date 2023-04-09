@@ -47,40 +47,22 @@ export const chatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
-    sendName(state, action) {
-      return {
-        ...state,
-        myName: action.payload,
-      };
+    joinChat(state, action) {
+      state.myName = action.payload
     },
     getUsers(state, action) {
-      return {
-        ...state,
-        users: action.payload,
-      };
+      state.users = action.payload
     },
     updateMessages(state, action) {
-      return {
-        ...state,
-        messages: action.payload,
-      };
+      state.messages = action.payload
     },
     getMessage(state, action) {
-      return {
-        ...state,
-        messages: [...state.messages, action.payload],
-      };
+      state.messages = [...state.messages, action.payload]
     },
     sendMessage(state, action): any { },
     replyMessage(state, action) {
       state.reply = action.payload;
     },
-    savePeerId(state, action) {
-      state.peerId = action.payload;
-    },
-    setConPeer(state, action) {
-      state.conn = action.payload
-    }
   },
 });
 
@@ -95,10 +77,9 @@ const chatReducer = chatSlice.reducer;
 export const {
   sendMessage,
   updateMessages,
-  sendName,
+  joinChat,
   replyMessage,
-  savePeerId,
-  setConPeer
+  getUsers,
 } = chatSlice.actions;
 
 
@@ -107,7 +88,7 @@ export const store = configureStore({
     chat: chatReducer,
   },
   middleware: (getDefaultMiddleware) =>
-  getDefaultMiddleware().concat(createMySocketMiddleware()),
+    getDefaultMiddleware().concat(createMySocketMiddleware()),
 });
 
 export type AppDispatch = typeof store.dispatch;

@@ -1,7 +1,7 @@
 import { sendMessage, replyMessage, RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-import { sendName } from "../../redux/store";
+import { joinChat } from "../../redux/store";
 import nameGenerator from "../../features/nameGenerator";
 import ReplyPanel from "../ReplyPanel";
 import toBase64 from "../../features/toBase64";
@@ -15,7 +15,7 @@ const Form = () => {
 
   useEffect(() => {
     const randomName = nameGenerator();
-    dispatch(sendName(randomName));
+    dispatch(joinChat(randomName));
   }, []);
 
   const sendMessageWithFiles = (

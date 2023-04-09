@@ -5,15 +5,16 @@ import React from "react";
 const ReplyMessageBlock: React.FC<any> = ({ reply }) => {
   const file = reply?.file
     ? getTypeFile(reply.file.type, reply.file.src, {
-        width: "120px",
-        height: "120px",
-      })
+      width: "120px",
+      height: "120px",
+    })
     : null;
 
   const scrollToElHandler = (e: any) => {
     e.preventDefault();
     document.getElementById(reply.id)?.scrollIntoView({ behavior: "smooth" });
   };
+
 
   return reply ? (
     <div className="reply-message-container" onClick={scrollToElHandler}>

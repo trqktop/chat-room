@@ -14,8 +14,6 @@ const Message = ({ data }: any) => {
     })
     : null;
 
-
-
   return (
     <>
       <div className="message__item-container" id={id}>
